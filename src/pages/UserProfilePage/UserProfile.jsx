@@ -1,79 +1,114 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { fetchUserProfile } from '../../stores/slices/authSlice';
-import "../../components/Header.css";
-
-const ProfileField = ({ label, value }) => (
-  <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
-    <dt className="text-sm font-medium text-gray-500">{label}</dt>
-    <dd className="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-      <span className="flex-grow">{value}</span>
-      <span className="ml-4 flex-shrink-0">
-
-      </span>
-    </dd>
-  </div>
-);
-
+import { Form, Button, Container, Row, Col, Alert, Spinner } from 'react-bootstrap';
+import { fetchUserProfile, updateUserProfile } from '../../stores/slices/authSlice';
 
 export default function UserProfile() {
   const dispatch = useDispatch();
   const { userId, userProfile, isLoading, error } = useSelector((state) => state.auth);
-  
+  const [profileData, setProfileData] = useState({ username: '', address: '', phoneNumber: '', email: '' });
+  const [successMessage, setSuccessMessage] = useState(''); 
+
   useEffect(() => {
     if (userId) {
-        dispatch(fetchUserProfile(userId));
-    } else {
-        console.log("User ID is not available.");
+      dispatch(fetchUserProfile(userId));
     }
-}, [dispatch, userId]);
+  }, [dispatch, userId]);
 
+  useEffect(() => {
+    if (userProfile) {
+      setProfileData({
+        username: userProfile.username,
+        address: userProfile.address,
+        phoneNumber: userProfile.phoneNumber,
+        email: userProfile.email 
+      });
+    }
+  }, [userProfile]);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  const handleInputChange = (field, value) => {
+    setProfileData({ ...profileData, [field]: value });
+  };
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  const handleUpdate = () => {
 
-  if (!userProfile) {
-    return <div>This user does not exist</div>;
-  }
+    dispatch(updateUserProfile({ id: userId, ...profileData }))
+      .unwrap() 
+      .then(() => {
+        setSuccessMessage('Cập nhật thành công!'); 
+        setTimeout(() => {
+          setSuccessMessage(''); 
+        }, 3000);
+      })
+      .catch((err) => {
+        console.error('Cập nhật không thành công:', err);
+      });
+  };
 
   return (
-    <div className="lg:pl-64">
-      <div className="lg:px-8">
-        <div className="mx-auto flex flex-col lg:max-w-4xl">
-          <main className="flex-1">
-            <div className="relative mx-auto max-w-4xl">
-              <div className="pb-16 pt-10">
-                <div className="px-4 sm:px-6 lg:px-0">
-                  <div className="py-6">
-                    <div className="mt-10 divide-y divide-gray-200">
-                      <div className="space-y-1">
-                        <h3 className="text-lg font-medium leading-6 text-gray-900">Profile</h3>
-                        <p className="max-w-2xl text-sm text-gray-500">
-                          This information will be displayed publicly so be careful what you share.
-                        </p>
-                      </div>
-                      <div className="mt-6">
-                        <dl className="divide-y divide-gray-200">
-                          <ProfileField label="User Name:" value={userProfile.username} />
-                          <ProfileField label="Email" value={userProfile.email} />
-                          <ProfileField label="Address" value={userProfile.address} />
-                          <ProfileField label="Phone" value={userProfile.phoneNumber} />
-                        </dl>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </main>
-        </div>
-      </div>   
-    </div>
-    
+    <Container className="py-5">
+      <h3 className="mb-4">Your Profile</h3>
+      
+      {isLoading && <Spinner animation="border" />}
+      {error && <Alert variant="danger">Error: {error}</Alert>}
+      {!isLoading && !userProfile && <Alert variant="warning">This user does not exist</Alert>}
+
+      {successMessage && <Alert variant="success">{successMessage}</Alert>}
+
+      {userProfile && (
+        <Form>
+          <Row className="mb-3">
+            <Col sm={6}>
+              <Form.Group controlId="username">
+                <Form.Label>UserName</Form.Label>
+                <Form.Control 
+                  type="text" 
+                  value={profileData.username} 
+                  onChange={(e) => handleInputChange('username', e.target.value)} 
+                />
+              </Form.Group>
+            </Col>
+
+            <Col sm={6}>
+              <Form.Group controlId="email">
+                <Form.Label>Email</Form.Label>
+                <Form.Control 
+                  type="email" 
+                  value={profileData.email} 
+                  readOnly 
+                  plaintext
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+
+          <Row className="mb-3">
+            <Col sm={6}>
+              <Form.Group controlId="address">
+                <Form.Label>Address</Form.Label>
+                <Form.Control 
+                  type="text" 
+                  value={profileData.address} 
+                  onChange={(e) => handleInputChange('address', e.target.value)} 
+                />
+              </Form.Group>
+            </Col>
+
+            <Col sm={6}>
+              <Form.Group controlId="phoneNumber">
+                <Form.Label>Phone Number</Form.Label>
+                <Form.Control 
+                  type="text" 
+                  value={profileData.phoneNumber} 
+                  onChange={(e) => handleInputChange('phoneNumber', e.target.value)} 
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+
+          <Button  variant="primary" onClick={handleUpdate}>Save Information</Button>
+        </Form>
+      )}
+    </Container>
   );
 }

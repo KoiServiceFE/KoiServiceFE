@@ -33,15 +33,6 @@ export const LoginUser = async (userData) => {
   }
 };
 
-
-export function GetAllUser() {
-  const { data, error, isLoading, mutate } = axios({
-    url: "",
-    method: "GET",
-  });
-  return { userData: data, isLoading, isError: error, mutate };
-}
-
 export async function GetUserById(id) {
   try {
     const response = await axios({
@@ -56,6 +47,15 @@ export async function GetUserById(id) {
   }
 }
 
+export async function UpdateUser({ id, ...userData }) {
+  try {
+    const response = await axios.put(`/users/update/${id}`, userData); 
+    return response.data;
+  } catch (error) {
+    console.error("Error in UpdateUser:", error);
+    return { ok: false, error };
+  }
+}
 
 export const DeleteUser = async (id) => {
   try {
@@ -70,20 +70,7 @@ export const DeleteUser = async (id) => {
   }
 };
 
-export async function UpdateUser(userData) {
-  try {
-    const response = axios({
-      url: "",
-      method: "UPDATE",
-      userData,
-    });
-    const data = await response.json();
-    return { ok: response.ok, data };
-  } catch (error) {
-    console.error("Error in UpdateUser:", error);
-    return { ok: false, error };
-  }
-}
+
 
 export const changePassword = async (userData) => {
   try {
