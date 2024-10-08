@@ -1,0 +1,31 @@
+#login {
+    padding: 60px 0;
+}
+
+#login .form {
+    background: #fff;
+    color: #666666;
+    font-weight: 400;
+}
+
+#login .form .form-control {
+    font-size: 16px;
+    padding: 10px 14px;
+    border-radius: 20px;
+}
+
+#login .form .form-control:focus {
+    border: 1px solid #A52A2A;
+}
+
+#login .form .btn-submit {
+    padding: 9px 30px;
+    color: #ffffff;
+    transition: 0.4s;
+    cursor: pointer;
+}
+
+#login .form .btn-submit:hover {
+    background: #540000;
+}
+

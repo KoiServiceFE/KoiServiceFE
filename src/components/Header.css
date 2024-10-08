@@ -1,0 +1,81 @@
+#header {
+    font-family: 'Nunito', sans-serif;
+    position: relative;
+    background: #080505;
+    height: 70px;
+    text-align: center;
+}
+
+#nav-menu-container {
+    display: inline-block;
+}
+
+.nav-menu, .nav-menu * {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.nav-menu ul {
+    top: 100%;
+    right: 0; 
+    text-align: left;
+    z-index: 99;
+    background: #080505;
+    min-width: 0; 
+}
+
+.nav-menu > li {
+    float: left;
+}
+
+.nav-menu li:hover > ul,
+.nav-menu li.sfHover > ul {
+    display: block;
+}
+
+.nav-menu a {
+    padding: 22px 15px 21px 15px;
+    text-decoration: none;
+    display: inline-block;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 18px;
+    outline: none;
+}
+
+.nav-menu a:hover,
+.nav-menu li:hover > a,
+.nav-menu .menu-active > a {
+    color: #ffffff;
+    background: #A52A2A;
+}
+
+.nav-menu ul li {
+    border-top: 1px solid #ffffff;
+}
+
+.nav-menu ul li:first-child {
+    border-top: 0;
+}
+
+.nav-menu ul li:hover {
+    background: #5b4444;
+}
+
+.nav-menu ul li a {
+    color: #ffffff;
+    padding: 10px 15px;
+    display: block; 
+    text-align: center; 
+}
+
+.nav-menu ul li a:hover {
+    color: #ffffff;
+}
+
+.carousel-img {
+    width: 1920px; 
+    height: 530px; 
+   
+}

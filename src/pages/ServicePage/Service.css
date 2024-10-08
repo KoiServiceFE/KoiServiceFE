@@ -1,0 +1,29 @@
+.icon {
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.btn-book {
+    color: black;
+}
+
+.btn-book:hover {
+    color: white;
+    transform: scale(1.05);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.icon.icon-1 {
+    background-image: url('/icon/icon-1.png');
+}
+
+.icon.icon-2 {
+    background-image: url('/icon/icon-2.png');
+}
+
+.icon.icon-3 {
+    background-image: url('/icon/icon-3.png');
+}
+.icon.icon-4 {
+    background-image: url('/icon/icon-8.png');
+}
+

@@ -1,0 +1,145 @@
+
+#about {
+    padding: 60px 0;
+    position: relative;
+    background: #f2f2f2;
+}
+.section-header h3 {
+    position: relative;
+    text-align: center;
+    color: #A52A2A;
+    font-size: 38px;
+    text-transform: capitalize;
+    font-weight: 900;
+    letter-spacing: 3px;
+    padding-bottom: 10px;
+    margin-bottom: 45px;
+}
+
+.section-header h3::before {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 60px;
+    height: 7px;
+    bottom: 1px;
+    left: calc(50% - 30px);
+    background: #A52A2A;
+    border-radius: 5px;
+}
+
+#about .section-header h3 {
+    margin-bottom: 20px;
+    color: #A52A2A;
+    font-weight: 800;
+}
+
+#about .about-col-left,
+#about .about-col-right {
+    position: relative;
+    top: 50%;
+    -moz-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+#about h3 {
+    text-align: left;
+}
+
+#about h3::before {
+    left: 0;
+}
+
+#about h4 {
+    margin: 30px 0 15px 0;
+    color: #A52A2A;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+#about .about-col-left img {
+    border-radius: 6px;
+    box-shadow: 0 0 0 0px #fff inset, 0 0 3px 0 rgba(0, 0, 0, 0.3);
+    max-width: 100%;
+    height: auto; 
+}
+
+#about .about-col-right p {
+    color: #353535;
+    font-size: 18px;
+    font-weight: 300;
+    margin-bottom: 15px;
+}
+
+#about .about-col-right p:last-child {
+    margin-bottom: 0;
+}
+
+#about .about-col-right a {
+    display: inline-block;
+    margin: 10px 0 0 0;
+    padding: 8px 30px;
+    color: #ffffff;
+    background: #A52A2A;
+    border-radius: 30px;
+}
+
+#about .about-col-right a:hover {
+    background: #540000;
+}
+
+#about .about-col {
+    margin-top: 30px;
+    padding: 25px 30px;
+    border-radius: 6px;
+    background: #ffffff;
+    box-shadow: 0 0 0 0px #fff inset, 0 0 3px 0 rgba(0, 0, 0, 0.3);
+}
+
+#about .about-col h4 {
+    margin-top: 0;
+}
+
+#about .about-col p {
+    margin-bottom: 15px;
+}
+
+#about .about-col p:last-child {
+    margin-bottom: 0;
+}
+
+
+#team {
+    position: relative;
+    padding: 60px 0 10px 0;
+    text-align: center;
+    background: #f2f2f2;
+}
+
+#team h4 {
+    margin: 20px 0 0 0;
+    color: #A52A2A;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+#team span {
+    font-size: 14px;
+}
+
+#team .row p {
+    margin: 10px 0 45px 0;
+}
+
+#team .box8 {
+    border-radius: 6px;
+    margin-bottom: 30px; 
+}
+
+#team .box8 img {
+    width: 95%; 
+    height: 250px; 
+    object-fit: cover; 
+    border-radius: 6px;
+}
