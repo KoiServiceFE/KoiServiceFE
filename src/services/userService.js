@@ -25,8 +25,7 @@ export const LoginUser = async (userData) => {
       method: "POST",
       data: userData, 
     });
-    console.log("API Response from CreateUser:", result); 
-
+    console.log("API Response from LoginUser:", result); 
     return result.data;
   } catch (error) {
     throw new Error( error.message);
