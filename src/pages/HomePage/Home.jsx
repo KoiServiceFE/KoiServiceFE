@@ -1,8 +1,15 @@
-import { Container, Row, Col, Image } from 'react-bootstrap';
+import { Container, Row, Col, Image } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import "./Home.css";
-import Service from '../ServicePage/Service';
+import Service from "../ServicePage/Service";
 
 export default function Home() {
+  const navigate = useNavigate();
+
+  const handleReadMoreClick = (person) => {
+    navigate(`/about?person=${person}`);
+  };
+
   return (
     <>
       <div id="about">
@@ -10,7 +17,11 @@ export default function Home() {
           <Row>
             <Col lg={5} md={6}>
               <div className="about-col-left">
-                <Image className="img-fluid" src="Images/about-us.jpg" rounded />
+                <Image
+                  className="img-fluid"
+                  src="Images/about-us.jpg"
+                  rounded
+                />
               </div>
             </Col>
 
@@ -21,16 +32,22 @@ export default function Home() {
                 </header>
 
                 <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Aliquam convallis quam sed tincidunt accumsan. Aliquam at
-                  tincidunt tortor, ac porta turpis. Curabitur lacinia venenatis
-                  semper.
+                  Dr. Johnson is a highly experienced veterinarian specializing
+                  in Koi fish care. With over 15 years of experience, he has
+                  treated hundreds of Koi fish, ensuring their health and
+                  well-being.
                 </p>
                 <p>
-                  Aliquam ut nibh ut lacus posuere facilisis. Vestibulum
-                  ullamcorper arcu et bibendum ultrices. Suspendisse rutrum
-                  turpis vitae.
+                  Dr. Johnson is passionate about educating fish owners on how
+                  to properly care for their pets, offering both preventive and
+                  specialized treatment services.
                 </p>
+                <button
+                  className="btn-primary"
+                  onClick={() => handleReadMoreClick("Johnson")}
+                >
+                  Read More
+                </button>
               </div>
             </Col>
           </Row>
@@ -63,7 +80,7 @@ export default function Home() {
           </Row>
         </Container>
       </div>
-      <Service/>
+      <Service />
       <section id="team">
         <Container>
           <div className="section-header">
@@ -78,9 +95,15 @@ export default function Home() {
               <h4>Maureen L. Reidy</h4>
               <span>Assistant Nurse</span>
               <p>
-                Lorem ipsum dolor sit amet adipiscing elit. Proin consequat
-                cursus sit amet elit proin consequat.
+                Maureen has been working with Dr. Johnson for the past 5 years.
+                She specializes in post-treatment care for aquatic animals.
               </p>
+              <button
+                className="btn-primary mb-5"
+                onClick={() => handleReadMoreClick("Maureen")}
+              >
+                Read More
+              </button>
             </Col>
 
             <Col md={4}>
@@ -90,9 +113,15 @@ export default function Home() {
               <h4>Janelle J. Hittle</h4>
               <span>Assistant Nurse</span>
               <p>
-                Lorem ipsum dolor sit amet adipiscing elit. Proin consequat
-                cursus sit amet elit proin consequat.
+                Janelle has over 7 years of animal care experience, focusing on
+                both Koi and other aquatic species with a highly skilled
               </p>
+              <button
+                className="btn-primary mb-5"
+                onClick={() => handleReadMoreClick("Janelle")}
+              >
+                Read More
+              </button>
             </Col>
 
             <Col md={4}>
@@ -102,9 +131,15 @@ export default function Home() {
               <h4>Michael C. Powell</h4>
               <span>Assistant Nurse</span>
               <p>
-                Lorem ipsum dolor sit amet adipiscing elit. Proin consequat
-                cursus sit amet elit proin consequat.
+                Michael is known for his expertise in aquatic animal surgery and
+                has been a valuable team member for 4 years.
               </p>
+              <button
+                className="btn-primary mb-5"
+                onClick={() => handleReadMoreClick("Michael")}
+              >
+                Read More
+              </button>
             </Col>
           </Row>
         </Container>
