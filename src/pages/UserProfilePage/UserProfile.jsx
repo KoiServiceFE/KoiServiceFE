@@ -16,14 +16,15 @@ export default function UserProfile() {
   }, [dispatch, userId]);
 
   useEffect(() => {
-    if (userProfile) {
+    if (userProfile) {     
       setProfileData({
         username: userProfile.username,
         address: userProfile.address,
         phoneNumber: userProfile.phoneNumber,
         email: userProfile.email 
       });
-    }
+    }  
+
   }, [userProfile]);
 
   const handleInputChange = (field, value) => {
@@ -31,6 +32,7 @@ export default function UserProfile() {
   };
 
   const handleUpdate = () => {
+    console.log('Updating profile with data:', profileData); // Log profileData before dispatch
 
     dispatch(updateUserProfile({ id: userId, ...profileData }))
       .unwrap() 

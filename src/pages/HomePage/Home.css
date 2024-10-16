@@ -1,9 +1,9 @@
+
 #about {
     padding: 60px 0;
     position: relative;
     background: #f2f2f2;
 }
-
 .section-header h3 {
     position: relative;
     text-align: center;
@@ -34,7 +34,8 @@
     font-weight: 800;
 }
 
-#about .about-col-left, #about .about-col-right {
+#about .about-col-left,
+#about .about-col-right {
     position: relative;
     top: 50%;
     -moz-transform: translateY(-50%);
@@ -61,7 +62,7 @@
     border-radius: 6px;
     box-shadow: 0 0 0 0px #fff inset, 0 0 3px 0 rgba(0, 0, 0, 0.3);
     max-width: 100%;
-    height: auto;
+    height: auto; 
 }
 
 #about .about-col-right p {
@@ -71,51 +72,21 @@
     margin-bottom: 15px;
 }
 
-#about .about-col-right p:last-of-type {
-    margin-bottom: 20px;  
+#about .about-col-right p:last-child {
+    margin-bottom: 0;
 }
 
-
-#about .about-col-right .btn-primary {
+#about .about-col-right a {
     display: inline-block;
+    margin: 10px 0 0 0;
     padding: 8px 30px;
     color: #ffffff;
     background: #A52A2A;
-    border: none;
     border-radius: 30px;
-    font-weight: 500;
-    transition: all 0.3s ease;
 }
 
-#about .about-col-right .btn-primary:hover {
+#about .about-col-right a:hover {
     background: #540000;
-    transform: translateY(-2px);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-#about .about-col-right .btn-primary:active {
-    transform: translateY(0);
-}
-
-#team .btn-primary {
-    display: inline-block;
-    padding: 8px 30px;
-    color: #ffffff;
-    background: #A52A2A;
-    border: none;
-    border-radius: 30px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-}
-
-#team .btn-primary:hover {
-    background: #540000;
-    transform: translateY(-2px);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-#team .btn-primary:active {
-    transform: translateY(0);
 }
 
 #about .about-col {
@@ -137,6 +108,7 @@
 #about .about-col p:last-child {
     margin-bottom: 0;
 }
+
 
 #team {
     position: relative;
@@ -162,12 +134,12 @@
 
 #team .box8 {
     border-radius: 6px;
-    margin-bottom: 30px;
+    margin-bottom: 30px; 
 }
 
 #team .box8 img {
-    width: 95%;
-    height: 250px;
-    object-fit: cover;
+    width: 95%; 
+    height: 250px; 
+    object-fit: cover; 
     border-radius: 6px;
 }

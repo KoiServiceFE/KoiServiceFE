@@ -1,24 +1,23 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Carousel, Dropdown } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
-import { logout } from '../stores/slices/authSlice';
+import { Carousel } from 'react-bootstrap';
+import { logout } from '../stores/slices/authSlice'; 
 import "./Header.css";
+import { useNavigate } from 'react-router-dom';
 
 export default function Header() {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const { username } = useSelector((state) => state.auth);
+    const  navigate = useNavigate();
+    const { username } = useSelector((state) => state.auth); 
 
     const carousels = [
-        { img: '/Images/fish.jpeg', script: 'ảnh 1' },
-        { img: '/Images/fish2.jpeg', script: 'ảnh 2' },
-        { img: '/Images/fish3.jpeg', script: 'ảnh 3' },
+        { img: '/Images/fish.jpeg' },
+        { img: '/Images/fish2.jpeg'},
+        { img: '/Images/fish3.jpeg'},
     ];
 
-    const handleLogout = (e) => {
-        e.preventDefault();
-        dispatch(logout());
+    const handleLogout = () => {
+        dispatch(logout()); 
         navigate("/");
     };
 
@@ -28,53 +27,32 @@ export default function Header() {
                 <div className="container">
                     <nav id="nav-menu-container">
                         <ul className="nav-menu">
-                            <li className="menu-active">
-                                <Link to="/">Home</Link>
-                            </li>
-                            <li>
-                                <Link to="/about">About</Link>
-                            </li>
-                            <li>
-                                <Link to="/service">Services</Link>
-                            </li>
-                            <li>
-                                <Link to="/contact">Contact</Link>
-                            </li>
-                            {username ? (
-                                <li>
-                                    <Dropdown>
-                                        <Dropdown.Toggle variant="link" id="dropdown-basic">
-                                            {username}
-                                        </Dropdown.Toggle>
-
-                                        <Dropdown.Menu>
-                                            <Dropdown.Item as={Link} to="/user/:id">
-                                                Profile
-                                            </Dropdown.Item>
-                                            <Dropdown.Item onClick={handleLogout}>
-                                                Logout
-                                            </Dropdown.Item>
-                                        </Dropdown.Menu>
-                                    </Dropdown>
+                            <li className="menu-active"><a href="/">Home</a></li>
+                            <li><a href="about.html">About</a></li>
+                            <li><a href="/Service">Services</a></li>
+                            <li><a href="/Contact">Contact</a></li>
+                            {username ? ( 
+                                <li className="dropdown">
+                                    <a href="#" className="dropdown-toggle" data-toggle="dropdown">
+                                        {username} <span className="caret"></span>
+                                    </a>
+                                    <ul className="dropdown-menu">
+                                        <li><a href="/User/:id">Profile</a></li>
+                                        <li><a href="#" onClick={handleLogout}>Logout</a></li>
+                                    </ul>
                                 </li>
                             ) : (
-                                <li>
-                                    <Link to="/login">Login</Link>
-                                </li>
+                                <li><a href="/Login">Login</a></li>
                             )}
                         </ul>
                     </nav>
                 </div>
             </header>
 
-            <Carousel>
+            <Carousel indicators={false}>
                 {carousels.map((carousel, index) => (
                     <Carousel.Item key={index}>
-                        <img 
-                            className="d-block w-100 carousel-img" 
-                            src={carousel.img} 
-                            alt={carousel.script} 
-                        />
+                        <img className="d-block w-100 carousel-img" src={carousel.img} alt={carousel.script} />
                         <Carousel.Caption>
                             <h3>{carousel.script}</h3>
                         </Carousel.Caption>

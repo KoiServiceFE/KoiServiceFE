@@ -31,7 +31,7 @@ export default function LoginForm() {
   };
 
   return (
-    <Form onSubmit={handleSubmit(onLoginSubmit)} className="form" id="login-form"> 
+    <Form noValidate onSubmit={handleSubmit(onLoginSubmit)} className="form" id="login-form"> 
       <Form.Group className="mb-3">
         <Form.Control
           type="email"

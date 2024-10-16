@@ -49,6 +49,8 @@ export async function GetUserById(id) {
 export async function UpdateUser({ id, ...userData }) {
   try {
     const response = await axios.put(`/users/update/${id}`, userData); 
+    console.log('User updated response:', response.data); // Log response to verify update
+
     return response.data;
   } catch (error) {
     console.error("Error in UpdateUser:", error);

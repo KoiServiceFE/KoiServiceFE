@@ -37,7 +37,7 @@ export default function SignUpForm({ onSuccess }) {
   };
 
   return (
-    <Form onSubmit={handleSubmit(onRegisterSubmit)} className="form">
+    <Form noValidate onSubmit={handleSubmit(onRegisterSubmit)} className="form">
       <Form.Group className="mb-3">
         <Form.Control
           type="text"
