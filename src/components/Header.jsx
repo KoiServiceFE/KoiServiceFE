@@ -28,7 +28,7 @@ export default function Header() {
                     <nav id="nav-menu-container">
                         <ul className="nav-menu">
                             <li className="menu-active"><a href="/">Home</a></li>
-                            <li><a href="about.html">About</a></li>
+                            <li><a href="/About">About</a></li>
                             <li><a href="/Service">Services</a></li>
                             <li><a href="/Contact">Contact</a></li>
                             {username ? ( 

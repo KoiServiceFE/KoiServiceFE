@@ -8,7 +8,7 @@ export default function About() {
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const initialPerson = queryParams.get('person') || 'Johnson';
-  
+
   const [currentPerson, setCurrentPerson] = useState(initialPerson);
 
   useEffect(() => {
@@ -65,32 +65,33 @@ export default function About() {
     <Container className="about-page py-5">
       <Row className="mb-5">
         <Col lg={4}>
-          <Image 
-            src={personInfo.image} 
-            rounded 
-            fluid 
+          <Image
+            src={personInfo.image}
+            rounded
+            fluid
             className="mb-4 image-hover"
           />
         </Col>
-        <Col lg={8}>
-          <h2 className="teamName mb-4">{personInfo.name}</h2>
+        <Col lg={8}style={{color:"#353535"}} >
+          <h2 className="teamName mb-4" style={{ color: "#A52A2A", fontWeight: "600" }}>{personInfo.name}</h2>
           <p className="lead">{personInfo.bio}</p>
-          <h5 className="mt-4">Education:</h5>
+          <h5 className="mt-4" style={{ color: "#A52A2A", fontWeight: "600" }}>Education:</h5>
           <p>{personInfo.education}</p>
-          <h5 className="mt-4">Expertise:</h5>
+          <h5 className="mt-4" style={{ color: "#A52A2A", fontWeight: "600" }}>Expertise:</h5>
           <p>{personInfo.expertise}</p>
         </Col>
       </Row>
+      
       <Row className="teamMem">
         {teamMembers
           .filter(member => member.id !== currentPerson)
           .map(member => (
             <Col key={member.id} lg={4} className="mb-4">
-              <Image 
-                src={member.image} 
-                rounded 
-                fluid 
-                className="mb-2 image-hover" 
+              <Image
+                src={member.image}
+                rounded
+                fluid
+                className="mb-2 image-hover"
                 onClick={() => handleImageClick(member.id)}
               />
               <h4>{member.name}</h4>
