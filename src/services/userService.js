@@ -70,22 +70,3 @@ export const DeleteUser = async (id) => {
   }
 };
 
-
-
-export const changePassword = async (userData) => {
-  try {
-    const res = axios({
-      url: "",
-      method: "UPDATE",
-      userData,
-    });
-
-    if (!res.ok) {
-      throw new Error(await res.text());
-    }
-    return res.json();
-  } catch (error) {
-    console.error("Error changing password:", error);
-    throw error;
-  }
-};

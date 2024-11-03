@@ -10,6 +10,36 @@ export const fetchServices = async () => {
   }
 };
 
+export const createService = async (serviceData) => {
+  try {
+    const response = await axios.post("/services", serviceData);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating service:", error);
+    throw error;
+  }
+};
+
+export const updateService = async (serviceID, serviceDetails) => {
+  try {
+    const response = await axios.put(`/services/${serviceID}`, serviceDetails);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating service:", error);
+    throw error;
+  }
+};
+
+export const deleteService = async (serviceID) => {
+  try {
+    await axios.delete(`/services/${serviceID}`);
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting service:", error);
+    throw error;
+  }
+};
+
 export const fetchAvailableVetsByDate = async (date) => {
   try {
     const response = await axios.post("/bookings/available-vets", {

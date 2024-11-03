@@ -26,7 +26,7 @@ const Booking = () => {
     useEffect(() => {
         dispatch(fetchUserProfile(userId));
         dispatch(getServices());
-    }, [dispatch, userId]);
+    }, [userId]);
 
     const handleDateChange = (e) => {
         const date = e.target.value;
@@ -56,7 +56,7 @@ const Booking = () => {
         e.preventDefault();
     
         if (!selectedService || !selectedDate) {
-            alert("Vui lòng chọn dịch vụ và ngày");
+            alert("Please Choose Service and Date");
             return;
         }
     
@@ -75,23 +75,24 @@ const Booking = () => {
                 await dispatch(createBookingWithRandomVet(bookingData));
             }
     
-            // Khởi tạo quá trình thanh toán với serviceID
+            // tạo payment với id service
             const paymentResponse = await dispatch(initiatePayment(selectedService)).unwrap();
     
             if (paymentResponse?.url) {
                 console.log("Redirecting to payment:", paymentResponse.url);
     
-                // Chuyển hướng người dùng đến cổng thanh toán VNPAY
+                // chuyển tới url vnpay
                 setTimeout(() => {
                     window.location.href = paymentResponse.url;
                 }, 2000);
             } else {
-                setBookingStatus({ type: 'error', message: 'Không thể khởi tạo thanh toán' });
+                console.error('Cannot initiate payment'); 
             }
         } catch (error) {
-            setBookingStatus({ type: 'error', message: error.message || 'Đã xảy ra lỗi. Vui lòng thử lại.' });
+            console.error(error.message || 'An error occurred. Please try again.'); 
         }
     };
+    
     
 
 

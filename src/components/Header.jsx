@@ -1,23 +1,23 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Carousel } from 'react-bootstrap';
-import { logout } from '../stores/slices/authSlice'; 
+import { logout } from '../stores/slices/authSlice';
 import "./Header.css";
 import { useNavigate } from 'react-router-dom';
 
 export default function Header() {
     const dispatch = useDispatch();
-    const  navigate = useNavigate();
-    const { username } = useSelector((state) => state.auth); 
+    const navigate = useNavigate();
+    const { username, userId } = useSelector((state) => state.auth);
 
     const carousels = [
         { img: '/Images/fish.jpeg' },
-        { img: '/Images/fish2.jpeg'},
-        { img: '/Images/fish3.jpeg'},
+        { img: '/Images/fish2.jpeg' },
+        { img: '/Images/fish3.jpeg' },
     ];
 
     const handleLogout = () => {
-        dispatch(logout()); 
+        dispatch(logout());
         navigate("/");
     };
 
@@ -31,13 +31,13 @@ export default function Header() {
                             <li><a href="/About">About</a></li>
                             <li><a href="/Service">Services</a></li>
                             <li><a href="/Contact">Contact</a></li>
-                            {username ? ( 
+                            {username ? (
                                 <li className="dropdown">
                                     <a href="#" className="dropdown-toggle" data-toggle="dropdown">
                                         {username} <span className="caret"></span>
                                     </a>
                                     <ul className="dropdown-menu">
-                                        <li><a href="/User/:id">Profile</a></li>
+                                        <li><a href={`/User/${userId ? userId : ""}`}>Profile</a></li>
                                         <li><a href="#" onClick={handleLogout}>Logout</a></li>
                                     </ul>
                                 </li>

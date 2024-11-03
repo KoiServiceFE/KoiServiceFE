@@ -20,6 +20,10 @@ const PaymentResult = () => {
     return new Date(year, month, day, hours, minutes, seconds);
   };
 
+  const formatAmount = (amount) => {
+    return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  };
+
   const paymentData = {
     vnp_Amount: (queryParams.get('vnp_Amount') / 100),  // chia 100 để khớp dữ liệu
     vnp_BankCode: queryParams.get('vnp_BankCode'),
@@ -53,7 +57,7 @@ const PaymentResult = () => {
             <tbody>
               <tr>
                 <td><strong>Amount</strong></td>
-                <td>{paymentData.vnp_Amount} VND</td>
+                <td>{formatAmount(paymentData.vnp_Amount)} VND</td>
               </tr>
               <tr>
                 <td><strong>BankCode</strong></td>
