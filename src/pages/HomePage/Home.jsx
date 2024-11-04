@@ -2,6 +2,7 @@ import { Container, Row, Col, Image } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import "./Home.css";
 import Service from "../ServicePage/Service";
+import KoiCarousel from "../../components/KoiCarousel";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ export default function Home() {
 
   return (
     <>
+      <KoiCarousel />
       <div id="about">
         <Container>
           <Row>

@@ -1,0 +1,16 @@
+.admin-nav {
+  width: 250px; /* Adjust width as needed */
+  height: 100vh; /* Full height */
+  background-color: #343a40; /* Dark background */
+  color: white; /* Text color */
+  padding-top: 20px;
+}
+
+.admin-nav .nav-link {
+  color: #ffffff; /* Link color */
+}
+
+.admin-nav .nav-link:hover {
+  background-color: #495057; /* Darker hover effect */
+  color: #ffffff; /* Keep text white on hover */
+}

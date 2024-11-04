@@ -1,33 +1,44 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { LoginUser, CreateUser, GetUserById, UpdateUser } from "../../services/userService";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import {
+  LoginUser,
+  CreateUser,
+  GetUserById,
+  UpdateUser,
+} from "../../services/userService";
 
-export const login = createAsyncThunk('auth/login', async (userData) => {
+export const login = createAsyncThunk("auth/login", async (userData) => {
   const response = await LoginUser(userData);
   return response;
 });
 
-export const register = createAsyncThunk('auth/register', async (userData) => {
+export const register = createAsyncThunk("auth/register", async (userData) => {
   const response = await CreateUser(userData);
   return response;
 });
 
-export const fetchUserProfile = createAsyncThunk('auth/fetchUserProfile', async (userId) => {
-  const response = await GetUserById(userId);
-  return response.userData;
-});
+export const fetchUserProfile = createAsyncThunk(
+  "auth/fetchUserProfile",
+  async (userId) => {
+    const response = await GetUserById(userId);
+    return response.userData;
+  }
+);
 
-export const updateUserProfile = createAsyncThunk('auth/updateUserProfile', async ({ id, ...userData }) => {
-  const response = await UpdateUser({ id, ...userData });
-  return response;
-});
+export const updateUserProfile = createAsyncThunk(
+  "auth/updateUserProfile",
+  async ({ id, ...userData }) => {
+    const response = await UpdateUser({ id, ...userData });
+    return response;
+  }
+);
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState: {
     token: localStorage.getItem("token") || null,
     userId: localStorage.getItem("userId") || null,
     username: localStorage.getItem("username") || null,
-    roleId: localStorage.getItem("roleId") || null, 
+    roleId: localStorage.getItem("roleId") || null,
     userProfile: null,
     isLoading: false,
     error: null,
@@ -53,13 +64,13 @@ const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false;
         state.token = action.payload.accessToken;
-        state.userId = action.payload.userInfo.id;
+        state.userId = action.payload.userInfo.userID;
         state.username = action.payload.userInfo.username;
-        state.roleId = action.payload.userInfo.roleId; 
+        state.roleId = action.payload.userInfo.roleId;
         localStorage.setItem("token", action.payload.accessToken);
         localStorage.setItem("userId", action.payload.userInfo.id);
         localStorage.setItem("username", action.payload.userInfo.username);
-        localStorage.setItem("roleId", action.payload.userInfo.roleId); 
+        localStorage.setItem("roleId", action.payload.userInfo.roleId);
       })
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false;
@@ -105,7 +116,6 @@ const authSlice = createSlice({
         state.error = action.error.message;
       });
   },
-
 });
 
 export const { logout } = authSlice.actions;

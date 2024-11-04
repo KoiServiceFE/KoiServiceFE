@@ -1,8 +1,8 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { createPayment,fetchPaymentInfo } from '../../services/paymentService';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createPayment, fetchPaymentInfo } from "../../services/paymentService";
 
 export const initiatePayment = createAsyncThunk(
-  'payment/initiatePayment',
+  "payment/initiatePayment",
   async (serviceID, { rejectWithValue }) => {
     try {
       const response = await createPayment(serviceID);
@@ -13,12 +13,11 @@ export const initiatePayment = createAsyncThunk(
   }
 );
 
-
 export const paymentInfo = createAsyncThunk(
-  'payment/paymentInfo',
+  "payment/paymentInfo",
   async (paymentData, { rejectWithValue }) => {
     try {
-      const response = await fetchPaymentInfo(paymentData);  
+      const response = await fetchPaymentInfo(paymentData);
       return response;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -27,14 +26,12 @@ export const paymentInfo = createAsyncThunk(
 );
 
 const paymentSlice = createSlice({
-  name: 'payment',
+  name: "payment",
   initialState: {
     paymentStatus: null,
     paymentError: null,
-  
   },
-  reducers: {
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(initiatePayment.fulfilled, (state, action) => {
@@ -49,7 +46,6 @@ const paymentSlice = createSlice({
       .addCase(paymentInfo.rejected, (state, action) => {
         state.paymentError = action.payload;
       });
-    
   },
 });
 

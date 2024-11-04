@@ -1,0 +1,10 @@
+.admin-layout {
+ margin: 0 50px;
+  height: fit-content;
+}
+
+.admin-content {
+
+  padding: 20px;
+  width: calc(100% - 50px);
+}

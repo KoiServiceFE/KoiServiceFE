@@ -7,7 +7,7 @@ export const CreateUser = async (userData) => {
       method: "POST",
       data: userData,
     });
-    console.log('API response:', res);
+    console.log("API response:", res);
     if (res.status !== 200) {
       throw new Error(res.data.message);
     }
@@ -23,12 +23,12 @@ export const LoginUser = async (userData) => {
     const result = await axios({
       url: "/users/login",
       method: "POST",
-      data: userData, 
+      data: userData,
     });
-    console.log("API Response from LoginUser:", result); 
+    console.log("API Response from LoginUser:", result);
     return result.data;
   } catch (error) {
-    throw new Error( error.message);
+    throw new Error(error.message);
   }
 };
 
@@ -46,10 +46,25 @@ export async function GetUserById(id) {
   }
 }
 
+export const GetAllUser = async () => {
+  try {
+    const response = await axios.get("/users");
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error("Failed to fetch users");
+    }
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    throw error;
+  }
+};
+
 export async function UpdateUser({ id, ...userData }) {
   try {
-    const response = await axios.put(`/users/update/${id}`, userData); 
-    console.log('User updated response:', response.data); 
+    const response = await axios.put(`/users/update/${id}`, userData);
+    console.log("User updated response:", response.data); // Log response to verify update
+
     return response.data;
   } catch (error) {
     console.error("Error in UpdateUser:", error);
@@ -70,3 +85,20 @@ export const DeleteUser = async (id) => {
   }
 };
 
+export const changePassword = async (userData) => {
+  try {
+    const res = axios({
+      url: "",
+      method: "UPDATE",
+      userData,
+    });
+
+    if (!res.ok) {
+      throw new Error(await res.text());
+    }
+    return res.json();
+  } catch (error) {
+    console.error("Error changing password:", error);
+    throw error;
+  }
+};
