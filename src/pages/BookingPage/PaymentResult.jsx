@@ -20,6 +20,11 @@ const PaymentResult = () => {
     return new Date(year, month, day, hours, minutes, seconds);
   };
 
+  const formatAmount = (amount) => {
+    return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  };
+
+
   const paymentData = {
     vnp_Amount: queryParams.get("vnp_Amount") / 100, // chia 100 để khớp dữ liệu
     vnp_BankCode: queryParams.get("vnp_BankCode"),
@@ -30,7 +35,8 @@ const PaymentResult = () => {
     vnp_ResponseCode: queryParams.get("vnp_ResponseCode"),
     vnp_TransactionNo: queryParams.get("vnp_TransactionNo"),
     vnp_TransactionStatus: queryParams.get("vnp_TransactionStatus"),
-    vnp_TxnRef: queryParams.get("vnp_TxnRef"),
+    vnp_TxnRef: queryParams.get("vnp_TxnRef")
+    
   };
 
   useEffect(() => {
@@ -39,6 +45,7 @@ const PaymentResult = () => {
       vnp_PayDate: paymentData.vnp_PayDate.toISOString(),
     };
     dispatch(paymentInfo(paymentDataWithDateString));
+
   }, [dispatch]);
 
   return (
@@ -52,11 +59,9 @@ const PaymentResult = () => {
         <Card.Body>
           <Table striped bordered hover>
             <tbody>
-              <tr>
-                <td>
-                  <strong>Amount</strong>
-                </td>
-                <td>{paymentData.vnp_Amount} VND</td>
+            <tr>
+                <td><strong>Amount</strong></td>
+                <td>{formatAmount(paymentData.vnp_Amount)} VND</td>
               </tr>
               <tr>
                 <td>
@@ -105,8 +110,7 @@ const PaymentResult = () => {
         </Card.Body>
         <Card.Footer>
           <Button
-            variant="primary"
-            onClick={() => (window.location.href = "/")}
+            variant="primary" onClick={() => (window.location.href = "/")}
           >
             Back Home
           </Button>

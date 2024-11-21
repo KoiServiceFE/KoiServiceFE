@@ -3,9 +3,9 @@ import { createPayment, fetchPaymentInfo } from "../../services/paymentService";
 
 export const initiatePayment = createAsyncThunk(
   "payment/initiatePayment",
-  async (serviceID, { rejectWithValue }) => {
+  async ({ serviceID, bookingID }, { rejectWithValue }) => {
     try {
-      const response = await createPayment(serviceID);
+      const response = await createPayment(serviceID, bookingID);
       return response;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -13,11 +13,14 @@ export const initiatePayment = createAsyncThunk(
   }
 );
 
+
 export const paymentInfo = createAsyncThunk(
   "payment/paymentInfo",
   async (paymentData, { rejectWithValue }) => {
+    const bookingID = localStorage.getItem("currentBookingId");
+
     try {
-      const response = await fetchPaymentInfo(paymentData);
+      const response = await fetchPaymentInfo(paymentData, bookingID);
       return response;
     } catch (error) {
       return rejectWithValue(error.message);

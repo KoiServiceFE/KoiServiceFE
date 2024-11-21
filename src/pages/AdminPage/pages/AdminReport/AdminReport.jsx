@@ -26,10 +26,8 @@ export default function AdminReport() {
   const [revenueData2, setRevenueData] = useState([]);
   const [loading, setLoading] = useState(true);
   const today = new Date();
-  const endDate = today.toISOString().split("T")[0];
-  const startDate = new Date(today.setDate(today.getDate() - 30))
-    .toISOString()
-    .split("T")[0];
+  const endDate = new Date(today.setDate(today.getDate() + 2)).toISOString().split("T")[0]; 
+  const startDate = new Date(today.setDate(today.getDate() - 32)).toISOString().split("T")[0]; // 30 days ago from the new endDate
 
   useEffect(() => {
     fetchServiceRevenue(startDate, endDate)
@@ -64,7 +62,7 @@ export default function AdminReport() {
         beginAtZero: true,
         title: {
           display: true,
-          text: "Revenue ($)",
+          text: "Revenue (VND)",
         },
       },
       x: {
@@ -102,7 +100,7 @@ export default function AdminReport() {
               ) : (
                 <>
                   {revenueData2.length > 0 ? (
-                    <Card.Text>Total revenue: {totalRevenue}</Card.Text>
+                    <Card.Text>Total revenue: {totalRevenue} VND</Card.Text>
                   ) : (
                     <Card.Text>No revenue data available.</Card.Text>
                   )}

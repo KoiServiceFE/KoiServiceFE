@@ -8,30 +8,72 @@ import {
   Col,
   Alert,
   Spinner,
+  Table,
+  Modal,
 } from "react-bootstrap";
 import {
   fetchUserProfile,
   updateUserProfile,
 } from "../../stores/slices/authSlice";
+import { toast } from "react-toastify";
+import { FaStar } from "react-icons/fa";
+import StatusBadge from "../../components/StatusBadge";
+import { initiatePayment } from "../../stores/slices/paymentSlice";
+import BookingStatus from "../../common/constant/BookingStatus";
+import {
+  fetchBookingsByUserId,
+  fetchPresByBookingId,
+  createFeedback,
+  updateBookingFeedback,
+} from "../../services/bookingService";
+import BookingDetailsModal from "../../components/BookingDetailsModel";
 
 export default function UserProfile() {
-  const dispatch = useDispatch();
-  const { userId, userProfile, isLoading, error } = useSelector(
-    (state) => state.auth
-  );
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState(null);
+  const [showBookingDetailsModal, setShowBookingDetailsModal] = useState(false);
+  const [showPrescriptionModal, setShowPrescriptionModal] = useState(false);
+  const [selectedBookingID, setSelectedBookingID] = useState(null);
   const [profileData, setProfileData] = useState({
     username: "",
     address: "",
     phoneNumber: "",
     email: "",
   });
-  const [successMessage, setSuccessMessage] = useState("");
+  const [bookings, setBookings] = useState([]);
+  const [newFeedbackDetails, setFeedbackDetails] = useState({
+    rating: "",
+    comment: "",
+  });
+
+  const dispatch = useDispatch();
+  const { userId, userProfile, isLoading, error } = useSelector(
+    (state) => state.auth
+  );
 
   useEffect(() => {
     if (userId) {
       dispatch(fetchUserProfile(userId));
+      fetchBookingHistory(userId);
     }
   }, [dispatch, userId]);
+
+  const handleCloseBookingDetailsModal = () => {
+    setSelectedBooking(null);
+    setShowBookingDetailsModal(false);
+  };
+
+
+
+  const fetchBookingHistory = async (userId) => {
+    try {
+      const bookingsData = await fetchBookingsByUserId(userId);
+      setBookings(bookingsData);
+    } catch (error) {
+      console.error("Error fetching bookings:", error);
+      toast.error("Failed to load booking history.");
+    }
+  };
 
   useEffect(() => {
     if (userProfile) {
@@ -49,19 +91,56 @@ export default function UserProfile() {
   };
 
   const handleUpdate = () => {
-    console.log("Updating profile with data:", profileData); // Log profileData before dispatch
-
     dispatch(updateUserProfile({ id: userId, ...profileData }))
       .unwrap()
       .then(() => {
-        setSuccessMessage("Cập nhật thành công!");
-        setTimeout(() => {
-          setSuccessMessage("");
-        }, 3000);
+        toast.success("Cập nhật thành công!");
       })
       .catch((err) => {
-        console.error("Cập nhật không thành công:", err);
+        toast.error("Cập nhật không thành công:", err);
       });
+  };
+
+  const handlePayment = async (serviceID, bookingID) => {
+    const paymentResponse = await dispatch(
+      initiatePayment({ serviceID, bookingID })
+    ).unwrap();
+
+    if (paymentResponse?.url) {
+      console.log("Redirecting to payment:", paymentResponse.url);
+      setTimeout(() => {
+        window.location.href = paymentResponse.url;
+      }, 2000);
+    } else {
+      console.error("Cannot initiate payment");
+      toast.error("Failed to initiate payment. Please try again.");
+    }
+  };
+
+  const handleFeedbackSubmit = async () => {
+    if (!newFeedbackDetails.rating || !newFeedbackDetails.comment) {
+      toast.error("Please provide both a rating and a comment.");
+      return;
+    }
+
+    const feedbackData = {
+      rating: newFeedbackDetails.rating,
+      comment: newFeedbackDetails.comment,
+      bookingID: selectedBookingID,
+      createdAt: Date.now(),
+    };
+
+    try {
+      const feedback = await createFeedback(feedbackData);
+
+      await updateBookingFeedback(selectedBookingID, feedback.feedbackID);
+
+      toast.success("Feedback submitted and booking updated successfully");
+      setFeedbackDetails({ rating: "", comment: "" });
+      setShowFeedbackModal(false);
+    } catch (error) {
+      toast.error("Failed to submit feedback. Please try again.");
+    }
   };
 
   return (
@@ -73,8 +152,6 @@ export default function UserProfile() {
       {!isLoading && !userProfile && (
         <Alert variant="warning">This user does not exist</Alert>
       )}
-
-      {successMessage && <Alert variant="success">{successMessage}</Alert>}
 
       {userProfile && (
         <Form>
@@ -136,6 +213,167 @@ export default function UserProfile() {
           </Button>
         </Form>
       )}
+
+      <div className="mt-5">
+        <h3 className="mb-4">Your Booking history</h3>
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>Booking ID</th>
+              <th>Status</th>
+              <th>Vet Name</th>
+              <th>Service </th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Details</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {bookings.length > 0 ? (
+              bookings.map((booking) => (
+                <tr key={booking.bookingID}>
+                  <td>{booking.bookingID}</td>
+                  <td>
+                    <StatusBadge status={booking.status} />
+                  </td>
+                  <td>{booking.vetName}</td>
+                  <td>{booking.serviceName}</td>
+                  <td>{booking.date}</td>
+                  <td>
+                    {booking.startTime} - {booking.endTime}
+                  </td>
+
+                  {/* Prescription data */}
+                  <td>
+
+                    <Button
+                      variant="primary"
+                      onClick={() => {
+                        setSelectedBooking(booking)
+                        setShowBookingDetailsModal(true);
+                      }}
+
+                    >
+                      View
+                    </Button>
+
+                  </td>
+
+                  <td>
+                    {booking.status == BookingStatus.COMPLETED ? (
+                      <Button
+                        variant="info"
+                        disabled={booking.feedbackID != null}
+                        onClick={() => {
+                          setShowFeedbackModal(true);
+                          setSelectedBookingID(booking.bookingID);
+                        }}
+                      >
+                        Feedback
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="info"
+                        disabled={
+                          booking.status != BookingStatus.WAITINGPAYMENT
+                        }
+                        onClick={() =>
+                          handlePayment(booking.serviceID, booking.bookingID)
+                        }
+                      >
+                        Pay now
+                      </Button>
+                    )}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6">No bookings available</td>
+              </tr>
+            )}
+          </tbody>
+        </Table>
+      </div>
+
+
+
+      <BookingDetailsModal
+        show={showBookingDetailsModal}
+        onHide={handleCloseBookingDetailsModal}
+        bookingData={selectedBooking}
+      />
+
+
+      {/* Feedback Modal */}
+      <Modal
+        show={showFeedbackModal}
+        onHide={() => setShowFeedbackModal(false)}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Add Feedback</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <form>
+            <div className="mb-3">
+              <label htmlFor="koiName">Rating</label>
+              <Form.Select
+                aria-label="Default select example"
+                onChange={(e) =>
+                  setFeedbackDetails({
+                    ...newFeedbackDetails,
+                    rating: e.target.value,
+                  })
+                }
+              >
+                <option>Open this select menu</option>
+                <option value="1">
+                  1 <FaStar />
+                </option>
+                <option value="2">
+                  2 <FaStar />
+                </option>
+                <option value="3">
+                  3 <FaStar />
+                </option>
+                <option value="4">
+                  4 <FaStar />
+                </option>
+                <option value="5">
+                  5 <FaStar />
+                </option>
+              </Form.Select>
+            </div>
+            <div className="mb-3">
+              <label htmlFor="koiSpecies">Comment</label>
+              <textarea
+                type="text"
+                id="koiSpecies"
+                className="form-control"
+                value={newFeedbackDetails.comment}
+                onChange={(e) =>
+                  setFeedbackDetails({
+                    ...newFeedbackDetails,
+                    comment: e.target.value,
+                  })
+                }
+              />
+            </div>
+          </form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => setShowFeedbackModal(false)}
+          >
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={handleFeedbackSubmit}>
+            Submit Feedback
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 }

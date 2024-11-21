@@ -20,17 +20,8 @@ const vetSlice = createSlice({
     reducers: {
         selectVet: (state, action) => {
             const selectedVet = state.availableVets.find(v => v.vetID === parseInt(action.payload));
-            if (selectedVet) {
-                state.selectedVetSlots = [{
-                    scheduleID: selectedVet.scheduleID,
-                    startTime: selectedVet.startTime,
-                    endTime: selectedVet.endTime,
-                    scheduleDate: selectedVet.scheduleDate
-                }];
-            } else {
-                state.selectedVetSlots = [];
-            }
-        }
+            state.selectedVetSlots = selectedVet ? selectedVet.slots : [];
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -39,19 +30,30 @@ const vetSlice = createSlice({
                 state.error = null;
             })
             .addCase(fetchVets.fulfilled, (state, action) => {
-                state.availableVets = action.payload.map(schedule => ({
-                    vetID: schedule.veterian.vetID,
-                    name: schedule.veterian.name,
-                    email: schedule.veterian.email,
-                    phone: schedule.veterian.phone,
-                    specialization: schedule.veterian.specialization,
-                    scheduleID: schedule.scheduleID,
-                    scheduleDate: schedule.scheduleDate,
-                    startTime: schedule.startTime,
-                    endTime: schedule.endTime,
-                    type: schedule.type,
-                    availability: schedule.availability
-                }));
+                const groupedVets = action.payload.reduce((acc, schedule) => {
+                    const vetID = schedule.veterian.vetID;
+
+                    if (!acc[vetID]) {
+                        acc[vetID] = {
+                            vetID,
+                            name: schedule.veterian.name,
+                            email: schedule.veterian.email,
+                            phone: schedule.veterian.phone,
+                            specialization: schedule.veterian.specialization,
+                            slots: [],
+                        };
+                    }
+
+                    acc[vetID].slots.push({
+                        scheduleID: schedule.scheduleID,
+                        startTime: schedule.startTime,
+                        endTime: schedule.endTime,
+                        scheduleDate: schedule.scheduleDate,
+                    });
+
+                    return acc;
+                }, {});
+                state.availableVets = Object.values(groupedVets);
                 state.isLoading = false;
             })
             .addCase(fetchVets.rejected, (state, action) => {

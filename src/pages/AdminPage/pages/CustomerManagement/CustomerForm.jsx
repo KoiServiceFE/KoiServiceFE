@@ -1,20 +1,11 @@
 /* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
-import {
-  Form,
-  Button,
-  Container,
-  Row,
-  Col,
-  Alert,
-  Spinner,
-  Card,
-} from "react-bootstrap";
+import {Form,Button,Container,Row,Col,Alert,Spinner,Card,} from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
 import { GetUserById, UpdateUser } from "../../../../services/userService";
 import { toast } from "react-toastify";
 
-export default function UserProfile() {
+export default function UserAdminProfile() {
   const [searchParams] = useSearchParams();
   const userId = searchParams.get("userId");
   const [isLoading, setLoading] = useState(true);

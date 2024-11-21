@@ -27,7 +27,9 @@ import ListAllVetSchedule from "../pages/VeterianPage/pages/DoctorSchedule/ListA
 import VetScheduleView from "../pages/VeterianPage/pages/DoctorSchedule/ScheduleForm";
 import CreatePrescription from "../pages/VeterianPage/pages/PrescriptionPage/PrescriptionForm";
 import KoiDetails from "../pages/VeterianPage/pages/DoctorSchedule/PatientDetails";
-//import PaymentResult from "../pages/BookingPage/PaymentResult";
+import UserAdminProfile from "../pages/AdminPage/pages/CustomerManagement/CustomerForm"
+import PaymentResult from "../pages/BookingPage/PaymentResult";
+import BookingManagement from "../pages/AdminPage/pages/BookingManagement";
 const routes = (
   <Routes>
     <Route path="/" element={<Home />} />
@@ -35,17 +37,12 @@ const routes = (
     <Route path="/Contact" element={<Contact />} />
     <Route path="/about" element={<About />} />
     <Route path="/user/:id" element={<UserProfile />} />
+    <Route path="/Service" element={<Service />} />
+    <Route path="/PaymentResult" element={<PaymentResult />} />
     {/* <Route path="/paymentresult" element={<PaymentResult />} /> */}
     {/* Protected Routes based on role */}
 
-    <Route
-      path="/Service"
-      element={
-        <ProtectedRoute requiredRoleId={UserRole.USER}>
-          <Service />
-        </ProtectedRoute>
-      }
-    />
+
 
     <Route
       path="/booking"
@@ -56,6 +53,8 @@ const routes = (
       }
     />
 
+
+ {/* Veterian-only route */}
     <Route
       path="/veterian"
       element={
@@ -81,6 +80,7 @@ const routes = (
         </ProtectedRoute>
       }
     >
+       <Route path="booking" element={<BookingManagement />}></Route>
       <Route path="doctor-schedule" element={<DoctorSchedule />}>
         <Route index element={<ListAllDoctorSchedule />} />
         <Route path="form" element={<ScheduleForm />} />
@@ -88,7 +88,7 @@ const routes = (
       <Route path="customer-management" element={<CustomerManagement />}>
         <Route index element={<ListAllCustomerTable />} />
         <Route path="details" element={<CustomerDetails />} />
-        <Route path="form" element={<CreatePrescription />} />
+        <Route path="form" element={<UserAdminProfile />} />
       </Route>
       <Route path="service-management" element={<ServiceManagement />}>
         <Route index element={<ListAllServiceTable />} />

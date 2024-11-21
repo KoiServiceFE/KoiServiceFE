@@ -8,10 +8,13 @@ const AdminSideBar = () => {
       <br />
       <Navbar bg="light" data-bs-theme="light">
         <Container>
-          <Navbar.Brand as={Link} to="/">
+          <Navbar.Brand as={Link} to="/admin">
             Admin Page
           </Navbar.Brand>
           <Nav className="me-auto">
+          <Nav.Link as={Link} to="/admin/booking">
+             Booking Management
+            </Nav.Link>
             <Nav.Link as={Link} to="/admin/doctor-schedule">
               Doctor Schedule
             </Nav.Link>

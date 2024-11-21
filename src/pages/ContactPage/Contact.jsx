@@ -14,23 +14,22 @@ export default function Contact() {
                         <div className="contact-detail">
                             <div className="contact-hours">
                                 <h4>Opening Hours</h4>
-                                <p>Monday-Friday: 9am to 7pm</p>
-                                <p>Saturday: 9am to 4pm</p>
-                                <p>Sunday: Closed</p>
+                                <p>Monday-Sunday: 7am to 5pm</p>
+                               
                             </div>
 
                             <div className="contact-info">
                                 <h4>Contact Info</h4>
-                                <p>4137 State Street, CA, USA</p>
-                                <p><a href="tel:+1-234-567-8900">+1-234-567-8900</a></p>
-                                <p><a href="mailto:info@example.com">info@example.com</a></p>
+                                <p>123 ABC Street, XYZ District, Ho Chi Minh City</p>
+                                <p>+84 0964703716</p>
+                                <p>fishcareservice@gmail.com</p>
                             </div>
                         </div>
                     </Col>
 
                     <Col md={6}>
                         <div className="fish">
-                            <Image src="/img/fish.jpg" fluid />
+                            <Image src="/Images/fish.jpeg" fluid />
                         </div>
                     </Col>
                 </Row>

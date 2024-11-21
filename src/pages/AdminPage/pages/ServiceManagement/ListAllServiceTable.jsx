@@ -37,11 +37,12 @@ export default function ListAllServiceTable() {
     if (confirmDelete) {
       try {
         await deleteService(id);
-        toast.success("Deleted service successfully");
+        toast.info("Deleted service successfully");
         // Reload services after deleting the service
         loadServices();
       } catch (error) {
-        setError("Failed to delete service");
+        toast.error("Failed to delete service! Something went wrong or Sevice is in use");
+        // setError("Failed to delete service");
       }
     }
   };

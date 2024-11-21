@@ -1,5 +1,5 @@
 #header {
-  font-family: "Nunito", sans-serif;
+  font-family: 'Nunito', sans-serif;
   position: relative;
   background: #080505;
   height: 70px;
@@ -10,8 +10,7 @@
   display: inline-block;
 }
 
-.nav-menu,
-.nav-menu * {
+.nav-menu, .nav-menu * {
   margin: 0;
   padding: 0;
   list-style: none;
@@ -19,11 +18,11 @@
 
 .nav-menu ul {
   top: 100%;
-  right: 0;
+  right: 0; 
   text-align: left;
   z-index: 99;
   background: #080505;
-  min-width: 0;
+  min-width: 0; 
 }
 
 .nav-menu > li {
@@ -49,7 +48,7 @@
 .nav-menu li:hover > a,
 .nav-menu .menu-active > a {
   color: #ffffff;
-  background: #a52a2a;
+  background: #A52A2A;
 }
 
 .nav-menu ul li {
@@ -67,8 +66,8 @@
 .nav-menu ul li a {
   color: #ffffff;
   padding: 10px 15px;
-  display: block;
-  text-align: center;
+  display: block; 
+  text-align: center; 
 }
 
 .nav-menu ul li a:hover {
@@ -76,6 +75,7 @@
 }
 
 .carousel-img {
-  width: 1920px;
-  height: 530px;
+  width: 1920px; 
+  height: 530px; 
+ 
 }

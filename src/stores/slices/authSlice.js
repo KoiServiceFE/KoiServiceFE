@@ -1,10 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import {
-  LoginUser,
-  CreateUser,
-  GetUserById,
-  UpdateUser,
-} from "../../services/userService";
+import {LoginUser,CreateUser,GetUserById,UpdateUser,} from "../../services/userService";
 
 export const login = createAsyncThunk("auth/login", async (userData) => {
   const response = await LoginUser(userData);
@@ -16,17 +11,13 @@ export const register = createAsyncThunk("auth/register", async (userData) => {
   return response;
 });
 
-export const fetchUserProfile = createAsyncThunk(
-  "auth/fetchUserProfile",
-  async (userId) => {
+export const fetchUserProfile = createAsyncThunk("auth/fetchUserProfile", async (userId) => {
     const response = await GetUserById(userId);
     return response.userData;
   }
 );
 
-export const updateUserProfile = createAsyncThunk(
-  "auth/updateUserProfile",
-  async ({ id, ...userData }) => {
+export const updateUserProfile = createAsyncThunk("auth/updateUserProfile", async ({ id, ...userData }) => {
     const response = await UpdateUser({ id, ...userData });
     return response;
   }
@@ -39,6 +30,7 @@ const authSlice = createSlice({
     userId: localStorage.getItem("userId") || null,
     username: localStorage.getItem("username") || null,
     roleId: localStorage.getItem("roleId") || null,
+    email: localStorage.getItem("email") || null,
     userProfile: null,
     isLoading: false,
     error: null,
@@ -49,10 +41,12 @@ const authSlice = createSlice({
       state.userId = null;
       state.username = null;
       state.userProfile = null;
+      state.email = null;
       localStorage.removeItem("token");
       localStorage.removeItem("userId");
       localStorage.removeItem("username");
       localStorage.removeItem("roleId");
+      localStorage.removeItem("email");
     },
   },
   extraReducers: (builder) => {
@@ -64,13 +58,14 @@ const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false;
         state.token = action.payload.accessToken;
-        state.userId = action.payload.userInfo.userID;
+        state.userId = action.payload.userInfo.id;
         state.username = action.payload.userInfo.username;
         state.roleId = action.payload.userInfo.roleId;
         localStorage.setItem("token", action.payload.accessToken);
         localStorage.setItem("userId", action.payload.userInfo.id);
         localStorage.setItem("username", action.payload.userInfo.username);
         localStorage.setItem("roleId", action.payload.userInfo.roleId);
+        localStorage.setItem("email", action.payload.userInfo.email);
       })
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false;

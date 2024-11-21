@@ -46,7 +46,7 @@ export const createBookingWithRandomVetService = async (bookingData) => {
 // Fetch all Koi
 export const fetchAllKoi = async () => {
   try {
-    const response = await axios.get("/api/koi");
+    const response = await axios.get("/koi");
     return response.data;
   } catch (error) {
     console.error("Error fetching all koi:", error);
@@ -57,7 +57,7 @@ export const fetchAllKoi = async () => {
 // Fetch Koi by ID
 export const fetchKoiById = async (id) => {
   try {
-    const response = await axios.get(`/api/koi/${id}`);
+    const response = await axios.get(`/koi/${id}`);
     return response.data;
   } catch (error) {
     console.error(`Error fetching koi with ID ${id}:`, error);
@@ -68,7 +68,7 @@ export const fetchKoiById = async (id) => {
 // Create a new Koi
 export const createKoi = async (koiData) => {
   try {
-    const response = await axios.post("/api/koi/create", koiData);
+    const response = await axios.post("/koi/create", koiData);
     return response.data;
   } catch (error) {
     console.error("Error creating koi:", error);
@@ -79,7 +79,7 @@ export const createKoi = async (koiData) => {
 // Update a Koi by ID
 export const updateKoi = async (id, koiData) => {
   try {
-    const response = await axios.put(`/api/koi/${id}`, koiData);
+    const response = await axios.put(`/koi/${id}`, koiData);
     return response.data;
   } catch (error) {
     console.error(`Error updating koi with ID ${id}:`, error);
@@ -90,9 +90,10 @@ export const updateKoi = async (id, koiData) => {
 // Delete a Koi by ID
 export const deleteKoi = async (id) => {
   try {
-    await axios.delete(`/api/koi/${id}`);
+    await axios.delete(`/koi/${id}`);
   } catch (error) {
     console.error(`Error deleting koi with ID ${id}:`, error);
     throw error;
   }
 };
+

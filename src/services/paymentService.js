@@ -1,15 +1,18 @@
 import axios from "../config/axios";
 
-export const createPayment = async (serviceID) => {
+export const createPayment = async (serviceID, bookingID) => {
   try {
-    const response = await axios.get(`/payment/create?serviceID=${serviceID}`);
+    const response = await axios.get(
+      `/payment/create?serviceID=${serviceID}&bookingID=${bookingID}`
+    );
+    localStorage.setItem("currentBookingId", bookingID);
     return response.data;
   } catch (error) {
     throw new Error("Error creating payment: " + error.message);
   }
 };
 
-export const fetchPaymentInfo = async (paymentData) => {
+export const fetchPaymentInfo = async (paymentData, bookingID) => {
   try {
     const response = await axios.get("/payment/payment_infor", {
       params: {
@@ -20,6 +23,7 @@ export const fetchPaymentInfo = async (paymentData) => {
         vnp_PayDate: paymentData.vnp_PayDate,
         vnp_TransactionNo: paymentData.vnp_TransactionNo,
         vnp_TxnRef: paymentData.vnp_TxnRef,
+        bookingID
       },
     });
     return response.data;

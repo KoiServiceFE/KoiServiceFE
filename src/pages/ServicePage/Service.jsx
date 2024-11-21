@@ -64,7 +64,7 @@ export default function Service() {
                       {service.name}
                     </Card.Title>
                     <Card.Text>
-                      {service.duration} Min | ${service.basePrice}
+                      {service.duration} Min | {service.basePrice} VND
                     </Card.Text>
                     <Card.Text>{service.description}</Card.Text>
                   </div>

@@ -83,7 +83,7 @@ const CustomerDetails = () => {
         </Card.Body>
       </Card>
 
-      <h5 className="mb-3">Booking History</h5>
+      {/* <h5 className="mb-3">Booking History</h5>
       <Table striped bordered hover responsive>
         <thead className="table-light">
           <tr>
@@ -124,7 +124,7 @@ const CustomerDetails = () => {
             </tr>
           ))}
         </tbody>
-      </Table>
+      </Table> */}
     </Container>
   );
 };

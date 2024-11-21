@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { logout } from "../stores/slices/authSlice";
 import "./Header.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import UserRole from "../common/constant/UserRole";
 
 export default function Header() {
@@ -61,7 +61,7 @@ export default function Header() {
                   </a>
                   <ul className="dropdown-menu">
                     <li>
-                      <a href={`/User/${userId}`}>Profile</a>
+                      <Link to={`/User/${userId}`}>Profile</Link>
                     </li>
                     <li>
                       <a href="#" onClick={handleLogout}>
