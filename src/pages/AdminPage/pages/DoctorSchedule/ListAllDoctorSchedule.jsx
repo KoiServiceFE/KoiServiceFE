@@ -1,11 +1,11 @@
-/* eslint-disable no-unused-vars */
+
 import { useState, useEffect } from "react";
 import { Table, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import {
   fetchAllSchedules,
   deleteScheduleById,
-} from "../../../../services/vetScheduleService"; // Import your service functions
+} from "../../../../services/vetScheduleService"; 
 import { toast } from "react-toastify";
 
 export default function ListAllDoctorSchedule() {
@@ -28,8 +28,10 @@ export default function ListAllDoctorSchedule() {
     loadSchedules();
   }, []);
 
-  // Handle delete schedule
   const handleDelete = async (scheduleId) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this schedule?");
+    if (!confirmDelete) return; 
+  
     try {
       await deleteScheduleById(scheduleId);
       setSchedules(schedules.filter((schedule) => schedule.id !== scheduleId));
@@ -40,6 +42,7 @@ export default function ListAllDoctorSchedule() {
       toast.error("Failed to delete schedule");
     }
   };
+  
 
   if (loading) {
     return <p>Loading schedules...</p>;
@@ -66,7 +69,7 @@ export default function ListAllDoctorSchedule() {
             <th>Start Time</th>
             <th>End Time</th>
             <th>Type</th>
-            <th>Availability</th>
+            
             <th>Actions</th>
           </tr>
         </thead>
@@ -80,7 +83,7 @@ export default function ListAllDoctorSchedule() {
               <td>{schedule.startTime}</td>
               <td>{schedule.endTime}</td>
               <td>{schedule.type}</td>
-              <td>{schedule.availability ? "Available" : "Unavailable"}</td>
+              
               <td>
                 <Link
                   to={`/admin/doctor-schedule/form?scheduleID=${schedule.scheduleID}`}

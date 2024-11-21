@@ -1,36 +1,18 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  Form,
-  Button,
-  Container,
-  Row,
-  Col,
-  Alert,
-  Spinner,
-  Table,
-  Modal,
-} from "react-bootstrap";
-import {
-  fetchUserProfile,
-  updateUserProfile,
-} from "../../stores/slices/authSlice";
+import {Form,Button,Container,Row,Col,Alert,Spinner,Table,Modal,} from "react-bootstrap";
+import {fetchUserProfile,updateUserProfile,} from "../../stores/slices/authSlice";
 import { toast } from "react-toastify";
 import { FaStar } from "react-icons/fa";
 import StatusBadge from "../../components/StatusBadge";
 import { initiatePayment } from "../../stores/slices/paymentSlice";
 import BookingStatus from "../../common/constant/BookingStatus";
-import {
-  fetchBookingsByUserId,
-  fetchPresByBookingId,
-  createFeedback,
-  updateBookingFeedback,
-} from "../../services/bookingService";
+import {fetchBookingsByUserId,fetchPresByBookingId,createFeedback,updateBookingFeedback,} from "../../services/bookingService";
 import BookingDetailsModal from "../../components/BookingDetailsModel";
 
 export default function UserProfile() {
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
-  const [selectedBooking, setSelectedBooking] = useState(null);
+  const [selectedBooking, setSelectedBooking] = useState(null); 
   const [showBookingDetailsModal, setShowBookingDetailsModal] = useState(false);
   const [showPrescriptionModal, setShowPrescriptionModal] = useState(false);
   const [selectedBookingID, setSelectedBookingID] = useState(null);
@@ -132,10 +114,17 @@ export default function UserProfile() {
 
     try {
       const feedback = await createFeedback(feedbackData);
-
       await updateBookingFeedback(selectedBookingID, feedback.feedbackID);
-
-      toast.success("Feedback submitted and booking updated successfully");
+      
+      setBookings((prevBookings) =>
+        prevBookings.map((booking) =>
+          booking.bookingID === selectedBookingID
+            ? { ...booking, feedbackID: feedback.feedbackID }
+            : booking
+        )
+      );
+     
+      toast.success("Feedback Submitted ");
       setFeedbackDetails({ rating: "", comment: "" });
       setShowFeedbackModal(false);
     } catch (error) {
@@ -214,7 +203,7 @@ export default function UserProfile() {
         </Form>
       )}
 
-      <div className="mt-5">
+<div className="mt-5">
         <h3 className="mb-4">Your Booking history</h3>
         <Table striped bordered hover>
           <thead>
@@ -300,9 +289,9 @@ export default function UserProfile() {
 
 
       <BookingDetailsModal
-        show={showBookingDetailsModal}
-        onHide={handleCloseBookingDetailsModal}
-        bookingData={selectedBooking}
+       show={showBookingDetailsModal}
+       onHide={handleCloseBookingDetailsModal}
+       bookingData={selectedBooking}
       />
 
 

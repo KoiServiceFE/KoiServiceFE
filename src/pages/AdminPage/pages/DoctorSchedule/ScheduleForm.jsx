@@ -10,6 +10,13 @@ import { useSearchParams } from "react-router-dom";
 import { getAllVeterians } from "../../../../services/veterianService";
 import { toast } from "react-toastify";
 
+const timeSlots = [
+  { startTime: "07:30:00", endTime: "09:00:00" },
+  { startTime: "09:30:00", endTime: "11:00:00" },
+  { startTime: "13:30:00", endTime: "15:00:00" },
+  { startTime: "15:30:00", endTime: "17:00:00" },
+];
+
 const ScheduleForm = () => {
   let isEdit = false;
   const [searchParams] = useSearchParams();
@@ -33,19 +40,27 @@ const ScheduleForm = () => {
   useEffect(() => {
     if (isEdit) {
       fetchVetScheduleById(scheduleID)
-        .then((data) => setSchedule(data))
+        .then((data) => {
+          setSchedule({
+            ...data,
+            timeSlot: `${data.startTime}-${data.endTime}`,
+          });
+        })
         .catch((error) => console.error("Error fetching schedule:", error));
     }
     getAllVeterians()
       .then((vetData) => setVeterians(vetData))
-      .catch((error) => console.error("Error fetching schedule:", error));
+      .catch((error) => console.error("Error fetching veterians:", error));
   }, [scheduleID, isEdit]);
 
-  // Handle form input changes
+  // Add timeSlot in schedule object to simplify logic
   const handleChange = (e) => {
     const { name, value } = e.target;
-    // If the veterian select changes, update the full veterian object by finding the selected one
-    if (name === "veterian") {
+
+    if (name === "timeSlot") {
+      const [startTime, endTime] = value.split("-");
+      setSchedule({ ...schedule, timeSlot: value, startTime, endTime });
+    } else if (name === "veterian") {
       const selectedVet = veterians.find(
         (vet) => vet.vetID === parseInt(value)
       );
@@ -62,6 +77,15 @@ const ScheduleForm = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const selectedDate = new Date(schedule.scheduleDate);
+
+    if (selectedDate < today) {
+      toast.error("Schedule date must not be earlier than today!");
+      return;
+    }
+
     try {
       if (isEdit) {
         await updateVetSchedule(scheduleID, schedule);
@@ -92,27 +116,23 @@ const ScheduleForm = () => {
             required
           />
         </Form.Group>
-        {/* Start Time */}
-        <Form.Group controlId="formStartTime" className="mt-2">
-          <Form.Label>Start Time</Form.Label>
+        {/* Time Slot */}
+        <Form.Group controlId="formTimeSlot" className="mt-2">
+          <Form.Label>Time Slot</Form.Label>
           <Form.Control
-            type="time"
-            name="startTime"
-            value={schedule.startTime}
+            as="select"
+            name="timeSlot"
+            value={schedule.timeSlot || ""}
             onChange={handleChange}
             required
-          />
-        </Form.Group>
-        {/* End Time */}
-        <Form.Group controlId="formEndTime" className="mt-2">
-          <Form.Label>End Time</Form.Label>
-          <Form.Control
-            type="time"
-            name="endTime"
-            value={schedule.endTime}
-            onChange={handleChange}
-            required
-          />
+          >
+            <option value="">Select Time Slot</option>
+            {timeSlots.map((slot, index) => (
+              <option key={index} value={`${slot.startTime}-${slot.endTime}`}>
+                {slot.startTime} - {slot.endTime}
+              </option>
+            ))}
+          </Form.Control>
         </Form.Group>
         {/* Type */}
         <Form.Group controlId="formType" className="mt-2">

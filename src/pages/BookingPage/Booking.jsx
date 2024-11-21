@@ -5,11 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getServices, selectService } from "../../stores/slices/serviceSlice";
 import { fetchUserProfile } from "../../stores/slices/authSlice";
 import { fetchVets, selectVet } from "../../stores/slices/vetSlice";
-import {
-  createBooking,
-  createBookingWithRandomVet,
-} from "../../stores/slices/bookingSlice";
-import { initiatePayment } from "../../stores/slices/paymentSlice";
+import {createBookingWithRandomVet,} from "../../stores/slices/bookingSlice";
 import { Form, Button, Row, Col, Container, Alert } from "react-bootstrap";
 import { createBookingService } from "../../services/bookingService";
 import { createKoi } from "../../services/koiService";

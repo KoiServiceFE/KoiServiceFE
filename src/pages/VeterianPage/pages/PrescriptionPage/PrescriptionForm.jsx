@@ -1,23 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Container, Form, Button } from "react-bootstrap";
 import { createPrescription } from "../../../../services/veterianService";
+import { updateBookingStatus } from "../../../../services/bookingService";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-const CreatePrescription = () => {
-  const { userId } = useSelector((state) => state.auth);
-  const [veterians, setVeterians] = useState([]);
+import { toast } from "react-toastify";
+import BookingStatus from "../../../../common/constant/BookingStatus";
+
+const CreatePrescription = ({ initialBooking }) => {
+ 
+  console.log(initialBooking);
   const [prescriptionData, setPrescriptionData] = useState({
-    prescriptionID: userId,
-    veterian: {},
-    record: {},
+    vetID: initialBooking.vetID,
+    bookingID: initialBooking.bookingID,
+    recordID: 2,
     medication: "",
     instruction: "",
   });
 
- 
   const navigate = useNavigate();
 
-  // Handle form input change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setPrescriptionData((prevData) => ({
@@ -26,46 +27,48 @@ const CreatePrescription = () => {
     }));
   };
 
-  // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleWaitingPayBooking = async (bookingId) => {
+    const confirmApprove = window.confirm(
+      "Are you sure you want to add a prescription and update the status for this booking?"
+    );
+    if (!confirmApprove) return false;
+  
     try {
-      await createPrescription(prescriptionData);
-      alert("Prescription created successfully!");
-      navigate("/admin/prescriptions"); // Redirect to prescriptions list after success
-    } catch (error) {
-      console.error("Error creating prescription:", error);
+      // Update booking status to 'WAITINGPAYMENT'
+      await updateBookingStatus(bookingId, BookingStatus.WAITINGPAYMENT); 
+
+      return true; 
+    } catch (err) {
+      console.error("Failed to update booking status", err);
+
+      return false; 
     }
   };
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    // Update booking status first
+    const statusUpdated = await handleWaitingPayBooking(initialBooking.bookingID);
+    if (!statusUpdated) return; // Stop execution if status update failed
+  
+    try {
+      // Create prescription
+      await createPrescription(prescriptionData);
+      toast.success("Prescription created successfully!");
+      navigate("/veterian/doctor-schedule");
+    } catch (error) {
+      console.error("Error creating prescription:", error);
+      toast.error("Error creating prescription. Please try again.");
+    }
+  };
+  
 
   return (
-    <Container className="mt-4">
-      <h3>Create New Prescription</h3>
+    <Container>
       <Form onSubmit={handleSubmit}>
-        {/* <Form.Group controlId="formVeterian">
-          <Form.Label>Veterian ID</Form.Label>
-          <Form.Control
-            type="text"
-            name="veterian"
-            value={prescriptionData.veterian.vetID || ""}
-            onChange={handleChange}
-            placeholder="Enter Veterian ID"
-          />
-        </Form.Group> */}
-
-        <Form.Group controlId="formRecord">
-          <Form.Label>Record ID</Form.Label>
-          <Form.Control
-            type="text"
-            name="record"
-            value={prescriptionData.record.recordID || ""}
-            onChange={handleChange}
-            placeholder="Enter Record ID"
-          />
-        </Form.Group>
-
         <Form.Group controlId="formMedication">
-          <Form.Label>Medication</Form.Label>
+          <Form.Label style={{ color: "black", fontWeight: "600" }}>Medication</Form.Label>
           <Form.Control
             type="text"
             name="medication"
@@ -75,10 +78,10 @@ const CreatePrescription = () => {
           />
         </Form.Group>
 
-        <Form.Group controlId="formInstruction">
-          <Form.Label>Instruction</Form.Label>
+        <Form.Group controlId="formInstruction" className="mt-4">
+          <Form.Label style={{ color: "black", fontWeight: "600" }}>Instruction</Form.Label>
           <Form.Control
-            type="text"
+            as="textarea"
             name="instruction"
             value={prescriptionData.instruction}
             onChange={handleChange}

@@ -9,17 +9,24 @@ import {
   Table,
   Modal,
 } from "react-bootstrap";
-import { fetchKoiById } from "../../../../services/koiService";
+
 import { fetchBookingsByScheduleId } from "../../../../services/bookingService";
 import { fetchVetScheduleById } from "../../../../services/vetScheduleService";
+import CreatePrescription from "../PrescriptionPage/PrescriptionForm";
+import StatusBadge from "../../../../components/StatusBadge";
+import BookingDetailsModal from "../../../../components/BookingDetailsModel";
+import BookingStatus from "../../../../common/constant/BookingStatus";
 
 const KoiDetails = () => {
   const [searchParams] = useSearchParams();
   const scheduleID = searchParams.get("scheduleID");
+
   const [schedule, setSchedule] = useState(null);
   const [bookings, setBookings] = useState([]);
-  const [selectedKoi, setSelectedKoi] = useState(null);
-  const [showKoiModal, setShowKoiModal] = useState(false);
+
+  const [selectedBooking, setSelectedBooking] = useState(null);
+  const [showBookingDetailsModal, setShowBookingDetailsModal] = useState(false);
+  const [showPrescriptionModal, setShowPrescriptionModal] = useState(false);
 
   const loadSchedule = async () => {
     try {
@@ -39,17 +46,20 @@ const KoiDetails = () => {
     }
   };
 
-  const loadKoiDetails = async (koiID) => {
-    try {
-      const koiData = await fetchKoiById(koiID);
-      setSelectedKoi(koiData);
-      setShowKoiModal(true); // Open the modal
-    } catch (error) {
-      console.error("Error fetching koi details:", error);
-    }
+  const handleShowPrescriptionModal = (booking) => {
+    setSelectedBooking(booking);
+    setShowPrescriptionModal(true);
   };
 
-  const handleCloseKoiModal = () => setShowKoiModal(false);
+  const handleClosePrescriptionModal = () => {
+    setSelectedBooking(null);
+    setShowPrescriptionModal(false);
+  };
+
+  const handleCloseBookingDetailsModal = () => {
+    setSelectedBooking(null);
+    setShowBookingDetailsModal(false);
+  };
 
   useEffect(() => {
     loadSchedule();
@@ -86,80 +96,83 @@ const KoiDetails = () => {
             <thead>
               <tr>
                 <th>Booking ID</th>
-                <th>Koi ID</th>
                 <th>Status</th>
                 <th>Vet Name</th>
                 <th>User Name</th>
                 <th>Date</th>
                 <th>Actions</th>
+                <th>Prescription</th>
               </tr>
             </thead>
             <tbody>
               {bookings.length > 0 ? (
-                bookings.map((booking) => (
-                  <tr key={booking.bookingID}>
-                    <td>{booking.bookingID}</td>
-                    <td>{booking.koiID}</td>
-                    <td>{booking.status}</td>
-                    <td>{booking.vetName}</td>
-                    <td>{booking.userName}</td>
-                    <td>{booking.date}</td>
-                    <td>
-                      <Button
-                        variant="info"
-                        onClick={() => loadKoiDetails(booking.koiID)}
-                      >
-                        View Koi
-                      </Button>
-                    </td>
-                  </tr>
-                ))
+                bookings
+                  .filter((booking) => booking.status !== BookingStatus.PENDING)
+                  .map((booking) => (
+                    <tr key={booking.bookingID}>
+                      <td>{booking.bookingID}</td>
+                      <td>
+                        <StatusBadge status={booking.status} />
+                      </td>
+                      <td>{booking.vetName}</td>
+                      <td>{booking.userName}</td>
+                      <td>{booking.date}</td>
+                      <td>
+                        <Button
+                          className="me-2"
+                          variant="info"
+                          onClick={() => {
+                            setSelectedBooking(booking);
+                            setShowBookingDetailsModal(true);
+                          }}
+                        >
+                          Details
+                        </Button>
+                      </td>
+                      <td>
+                        <Button
+                          variant="primary"
+                          disabled={booking.status === BookingStatus.COMPLETED}
+                          onClick={() => handleShowPrescriptionModal(booking)}
+                        >
+                          Create Prescription
+                        </Button>
+                      </td>
+                    </tr>
+                  ))
               ) : (
                 <tr>
-                  <td colSpan="7">No bookings available</td>
+                  <td colSpan="6">No bookings available</td>
                 </tr>
               )}
             </tbody>
           </Table>
           <Link to="/veterian/doctor-schedule">
-            <Button variant="primary">Back</Button>
-          </Link>{" "}
-          <Link to="/veterian/doctor-schedule/prescription">
-            <Button variant="outline-primary">Create Prescription</Button>
+            <Button variant="outline-secondary" className="ml-2">
+              Back
+            </Button>
           </Link>
         </Card.Body>
       </Card>
 
       {/* Modal for Koi Details */}
-      <Modal show={showKoiModal} onHide={handleCloseKoiModal}>
+
+      <BookingDetailsModal
+        show={showBookingDetailsModal}
+        onHide={handleCloseBookingDetailsModal}
+        bookingData={selectedBooking}
+      />
+
+      {/* Modal for Creating Prescription */}
+      <Modal show={showPrescriptionModal} onHide={handleClosePrescriptionModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Koi Details</Modal.Title>
+          <Modal.Title>Create Prescription</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {selectedKoi ? (
-            <>
-              <p>
-                <strong>Name:</strong> {selectedKoi.name}
-              </p>
-              <p>
-                <strong>Species:</strong> {selectedKoi.species}
-              </p>
-              <p>
-                <strong>Color:</strong> {selectedKoi.color}
-              </p>
-              <p>
-                <strong>Weight:</strong> {selectedKoi.weight} kg
-              </p>
-            </>
-          ) : (
-            <p>Loading koi details...</p>
+          {selectedBooking && (
+            <CreatePrescription initialBooking={selectedBooking} />
           )}
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseKoiModal}>
-            Close
-          </Button>
-        </Modal.Footer>
       </Modal>
     </Container>
   );
